@@ -1,0 +1,12 @@
+@import "../../styles/variables";
+.content {
+  flex-grow: 1;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: ($spacer * 2) !important;
+  margin-bottom: ($spacer * 2);
+  min-height: 70vh;
+}
+.navItem{
+  min-width: 100px;
+}

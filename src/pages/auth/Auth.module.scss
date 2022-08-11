@@ -1,0 +1,11 @@
+@import '../../styles//variables';
+.container{
+    width: 400px;
+    height: 250px;
+    margin: 100px auto;
+    padding: 2 * $spacer;
+    border-width: 1px;
+    border-color: $light;
+    border-style: solid;
+    border-radius: 5px;
+}

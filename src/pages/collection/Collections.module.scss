@@ -1,0 +1,24 @@
+@import "../../styles/variables";
+
+.tagForm{
+  width: 60%;
+  display: flex;
+  justify-content: space-around
+}
+.actionContainer{
+  display: flex;
+  justify-content: space-between
+}
+.info {
+  margin-bottom: $spacer;
+}
+.input{
+  width: 60%;
+}
+.submit{
+  min-width: 200px;
+}
+tr{
+  cursor: pointer;
+}
+
