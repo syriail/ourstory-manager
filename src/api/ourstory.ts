@@ -168,16 +168,16 @@ export const createStory = async(token: string, request: Requests.CreateStoryReq
     })
 }
 
-export const getStoriesByCollection = async(token: string, collectionId: string, locale: string):Promise<OurStory.Story[]> =>{
+export const getStoriesByCollection = async(token: string, collectionId: string, locale: string, lastId?: string):Promise<{lastId: string | undefined, stories: OurStory.Story[]}> =>{
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       }
     return new Promise((resolve, reject)=>{
-        Axios.get(`${endpoint}/stories/${collectionId}?locale=${locale}`, {headers})
+        Axios.get(`${endpoint}/stories/${collectionId}?locale=${locale}&last=${lastId}`, {headers})
         .then(response=>{
             if(response.status === 200){
-                resolve(response.data.stories)
+                resolve(response.data)
             }else{
                 reject('')
             }

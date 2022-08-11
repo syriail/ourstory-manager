@@ -42,7 +42,7 @@ const OurStoryNavbar: React.FunctionComponent = (props: any) => {
               >
                 {props.collections.map((collection: Collection, index: number) => (
                   <NavDropdown.Item key={index} href={`/stories/${collection.id}/${collection.defaultLocale}`}>
-                    {collection.name}
+                    {collection.name} ({collection.storiesCount})
                   </NavDropdown.Item>
                 ))}
               </NavDropdown>

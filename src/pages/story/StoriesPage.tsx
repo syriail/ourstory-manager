@@ -14,28 +14,52 @@ const StoriesPage: React.FunctionComponent<any> = (props) => {
   const {t} = useTranslation()
   const {employee, getToken} = useContext(AuthContext)
   const [stories, setStories] = useState<Story[]>([])
+  const [pageHistory, setPageHistory] = useState<string[]>(['undefined'])
+  const [lastId, setLastId] = useState<string | undefined>()
+
   const navigate = useNavigate()
   const params = useParams()
   const collectionId = params.collectionId
   const defaultLocale = params.defaultLocale
   useEffect(() => {
     loadStories()
-  }, [])
+  }, [pageHistory])
+
+
+  useEffect(()=>{
+    console.log(lastId)
+    console.log(pageHistory)
+  }, [pageHistory])
 
   const loadStories = async () => {
     const token = await getToken()
+    let lastPageHistory = pageHistory[pageHistory.length - 1]
     getStoriesByCollection(
       token, 
       collectionId!,
-      employee!.locale
-    ).then((stories)=>{
-      setStories(stories)
+      employee!.locale,
+      lastPageHistory === 'undefined' ? undefined : lastPageHistory
+    ).then((res)=>{
+      setStories(res.stories)
+      setLastId(res.lastId)
     })
+  }
+
+  const nextPage = ()=>{
+    if(lastId){
+      setPageHistory([...pageHistory, lastId])
+    }
     
+  }
+  const prevPage = ()=>{
+    if(pageHistory.length === 1) return
+    const newHistory = pageHistory.slice(0, pageHistory.length - 1)
+    setPageHistory(newHistory)
   }
 
   const showDetails = (id: string) => {
-    navigate(`/stories/details/${id}`)
+    //navigate(`/stories/details/${id}`)
+    window.open(`/stories/details/${id}`, '_blank')
   }
   const toAddStory = () => {
     navigate(`/stories/ADD/${collectionId}/${defaultLocale}`)
@@ -93,6 +117,10 @@ const StoriesPage: React.FunctionComponent<any> = (props) => {
           ))}
         </tbody>
       </Table>
+      <div>
+        <Button disabled={lastId === undefined} onClick={nextPage}>Next</Button>
+        <Button disabled={pageHistory.length === 1} onClick={prevPage}>Prev</Button>
+      </div>
     </Container>
   )
 }
