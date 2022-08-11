@@ -58,7 +58,6 @@ const StoriesPage: React.FunctionComponent<any> = (props) => {
   }
 
   const showDetails = (id: string) => {
-    //navigate(`/stories/details/${id}`)
     window.open(`/stories/details/${id}`, '_blank')
   }
   const toAddStory = () => {
