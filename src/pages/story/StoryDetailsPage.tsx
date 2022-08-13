@@ -66,7 +66,7 @@ const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
     setMediaToShow(undefined)
   }
   const addTranslation = () => {
-    if(translationToAdd) navigate(`/stories/TRANSLATE/${storyId}/${translationToAdd}`)
+    if(translationToAdd) navigate(`/stories/translate/ADD/${storyId}/${translationToAdd}`)
   }
   const removeMedia = async (path: string) => {
     try {
@@ -144,7 +144,7 @@ const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
           </Col>
           <Col xs={9}>
             {story.availableTranslations.map((locale, index) => (
-              <span key={index}>{t(`language_${locale}`)} {' '}</span>
+              <a href={`/stories/translate/EDIT/${story!.id}/${locale}`} key={index}>{t(`language_${locale}`)} {' '}</a>
             ))}
           </Col>
         </Row>

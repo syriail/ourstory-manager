@@ -4,6 +4,7 @@ import CollectionDetails from '../pages/collection/CollectionDetailsPage'
 import CollectionsPage from '../pages/collection/CollectionsPage'
 import MutateCollectionPage from '../pages/collection/MutateCollectionPage'
 import TranslateCollection from '../pages/collection/TranslateCollection'
+import MutateStoryTranslationPage from '../pages/story/MutateStoryTranslationPage'
 import MutateStroyPage from '../pages/story/MutateStroyPage'
 import StoriesPage from '../pages/story/StoriesPage'
 import StoryDetailsPage from '../pages/story/StoryDetailsPage'
@@ -21,6 +22,8 @@ const MainRouter: React.FunctionComponent = ()=>(
       <Route path="stories/EDIT/:collectionId/:locale/:storyId" element={<MutateStroyPage action='EDIT'/>} />
       <Route path="stories/:collectionId/:defaultLocale" element={<StoriesPage />} />
       <Route path="stories/details/:storyId" element={<StoryDetailsPage />} />
+      <Route path="stories/translate/ADD/:storyId/:locale" element={<MutateStoryTranslationPage />} />
+      <Route path="stories/translate/EDIT/:storyId/:locale" element={<MutateStoryTranslationPage action='EDIT'/>} />
     </Route>
 </Routes>
 )

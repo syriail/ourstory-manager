@@ -304,3 +304,19 @@ export const updateStory = (token: string, storyId: string, request: Requests.Cr
         }).catch(error=> reject(error))
     })
 }
+export const translateStory = (token: string, request: Requests.TranslateStoryRequest)=>{
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    return new Promise((resolve, reject)=>{
+        Axios.post(`${endpoint}/story/translate`, request, {headers})
+        .then(response =>{
+            if(response.status === 201){
+                resolve(true)
+            }else{
+                reject('')
+            }
+        }).catch(error=> reject(error))
+    })
+}
