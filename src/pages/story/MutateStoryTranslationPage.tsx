@@ -16,6 +16,7 @@ import { AuthContext } from "../../contexts/authContext"
 import { getStoryDetails, translateStory } from "../../api/ourstory"
 import { Story } from "../../api/models"
 import { TagValueRequest, TranslateStoryRequest } from "../../api/requests"
+import CenteredSpinner from "../../components/ui/CenteredSpinner"
 
 const MutateStoryTranslationPage: React.FunctionComponent<{action?: string}> = ({action}) => {
     const {t}  = useTranslation()
@@ -42,6 +43,7 @@ const MutateStoryTranslationPage: React.FunctionComponent<{action?: string}> = (
   const [invalidTranscript, setInvalidTranscript] = useState(false)
   const [errorMessage, setErrorMessage] = useState()
   const [beingUpdated, setBeingUpdated] = useState(false)
+  const [beingLoaded, setBeingLoaded] = useState(true)
   const locale = routerParams.locale
   const storyId = routerParams.storyId
   useEffect(() => {
@@ -59,6 +61,9 @@ const MutateStoryTranslationPage: React.FunctionComponent<{action?: string}> = (
         console.log(error)
         setErrorMessage(t("error_not_found"))
       })
+      .finally(()=>{
+        setBeingLoaded(false)
+      })
       if(action === 'EDIT'){
         //If action is edit translation
         getStoryDetails(token, storyId, locale!)
@@ -67,6 +72,9 @@ const MutateStoryTranslationPage: React.FunctionComponent<{action?: string}> = (
         })
         .catch(error=>{
           console.log(error)
+        })
+        .finally(()=>{
+          setBeingLoaded(false)
         })
       }
       
@@ -243,6 +251,9 @@ const MutateStoryTranslationPage: React.FunctionComponent<{action?: string}> = (
     </div>
   ) : !errorMessage && story ? (
     <Container>
+      {beingLoaded &&
+          <CenteredSpinner />
+        }
       <Row className={classes.info}>
         <Col xs={3}>
           <strong>{t("label_language")}</strong>

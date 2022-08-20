@@ -11,23 +11,25 @@ import {useTranslation} from 'react-i18next'
 import { Collection } from "../../api/models"
 import { useNavigate } from "react-router"
 import { AuthContext } from "../../contexts/authContext"
+import CenteredSpinner from "../../components/ui/CenteredSpinner"
 
 
-const CollectionsPage: React.FunctionComponent<{collections: Collection[]}> = (props) => {
+const CollectionsPage: React.FunctionComponent<{collections: Collection[], isFetching: boolean}> = (props) => {
   const {employee} = useContext(AuthContext)
     const {t} = useTranslation()
     const navigate = useNavigate()
+
   const showDetails = (id: string) => {
-    navigate(`collections/${id}`)
+    navigate(`/collections/${id}`)
   }
   const toAddStory = (collectionId: string, defaultLocale: string) => {
     navigate(`/stories/ADD/${collectionId}/${defaultLocale}`)
   }
   const toAddCollection = () => {
-    navigate(`collections/ADD/`)
+    navigate(`/collections/ADD/`)
   }
   const toEditCollection = (collectionId: string, locale: string) => {
-    navigate(`collections/EDIT/${collectionId}/${locale}`)
+    navigate(`/collections/EDIT/${collectionId}/${locale}`)
 
   }
   //bg="light"
@@ -38,12 +40,12 @@ const CollectionsPage: React.FunctionComponent<{collections: Collection[]}> = (p
           <h2>{t("label_collections")}</h2>
         </Col>
         <Col xs={2}>
-          <Button variant="link" onClick={toAddCollection}>
+          <Button variant="dark" onClick={toAddCollection} style={{width:"100%"}}>
             {t("button_add_collection")}
           </Button>
         </Col>
       </Row>
-
+      
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -55,6 +57,7 @@ const CollectionsPage: React.FunctionComponent<{collections: Collection[]}> = (p
             <th>{t("label_actions")}</th>
           </tr>
         </thead>
+        
         <tbody>
           {props.collections.map((collection, index) => (
             <tr key={index}>
@@ -104,6 +107,9 @@ const CollectionsPage: React.FunctionComponent<{collections: Collection[]}> = (p
           ))}
         </tbody>
       </Table>
+      {props.isFetching && 
+          <CenteredSpinner />
+        }
     </Container>
   )
 }
@@ -111,7 +117,7 @@ const CollectionsPage: React.FunctionComponent<{collections: Collection[]}> = (p
 const mapStateToProps = (state: any) => {
   return {
     collections: state.collections.collections,
-    isLoading: state.collections.isLoading
+    isFetching: state.collections.isFetching
   }
 }
 

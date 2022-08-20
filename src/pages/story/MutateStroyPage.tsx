@@ -18,6 +18,7 @@ import {useTranslation} from 'react-i18next'
 import { AuthContext } from "../../contexts/authContext"
 import { useNavigate, useParams } from "react-router"
 import {TagValueInputProps} from './utils'
+import CenteredSpinner from "../../components/ui/CenteredSpinner"
 
 
 
@@ -43,6 +44,7 @@ const MutateStroyPage: React.FunctionComponent<any> = (props) => {
   const [isTitleValid, setIsTitleValid] = useState(true)
   const [isStoryTypeValid, setIsStoryTypeValid] = useState(true)
   const [isTranscriptValid, setIsTranscriptValid] = useState(true)
+  const [beingLoaded, setBeingLoaded] = useState(true)
 
   const {t} = useTranslation()
   const navigate = useNavigate()
@@ -68,7 +70,7 @@ const MutateStroyPage: React.FunctionComponent<any> = (props) => {
     }else if(props.action === 'ADD'){
       prepareMutation(collection)
     }
-    
+    setBeingLoaded(false)
   }
   const prepareMutation = (collection: Collection, story?:Story) => {
     if (collection) {
@@ -232,6 +234,9 @@ const deleteStory = async()=>{
   ) : (
     <Fragment>
       <Form onSubmit={saveStory}>
+        {beingLoaded &&
+          <CenteredSpinner />
+        }
         <Row>
           <Col xs={12} lg={6}>
             <span>{`${t("message_story_language")} ${

@@ -23,6 +23,8 @@ import { AuthContext } from "../../contexts/authContext"
 import { useNavigate } from "react-router"
 import { collectionAdded, collectionUpdated } from "../../store/actions"
 import { CreateCollectionRequest } from "../../api/requests"
+import CenteredSpinner from "../../components/ui/CenteredSpinner"
+
 
 const MutateCollectionPage: React.FunctionComponent<{action: string, collectionCreated:(collection: Collection)=>void, collectionUpdated:(collection: Collection)=>void}> = (props) => {
     const {t, i18n} = useTranslation()
@@ -46,6 +48,7 @@ const MutateCollectionPage: React.FunctionComponent<{action: string, collectionC
   const [invalidDescription, setInalidDescription] = useState(false)
   const [invalidTagSlug, setInvalidTagSlug] = useState(false)
   const [invalidTagName, setInvalidTagName] = useState(false)
+  const [beingLoaded, setBeingLoaded] = useState(true)
   
   const routerParams = useParams()
 
@@ -78,8 +81,6 @@ const MutateCollectionPage: React.FunctionComponent<{action: string, collectionC
         break
       case 'EDIT':
         if (!theCollection) {
-          console.log("collection not found")
-          console.log(theCollection)
           setErrorMessage(t("error_not_found"))
         } else if (theCollection.manager.id !== employee?.id) {
           setErrorMessage(t("error_not_collection_manager"))
@@ -112,7 +113,7 @@ const MutateCollectionPage: React.FunctionComponent<{action: string, collectionC
     }else{
       setDefaultLocale(employee!.locale!)
     }
-    
+    setBeingLoaded(false)
   }
   const tagNameChanged = (e: { target: { value: any } }) => {
     const value = e.target.value
@@ -291,6 +292,9 @@ const MutateCollectionPage: React.FunctionComponent<{action: string, collectionC
     </div>
   ) : !errorMessage ? (
     <Container>
+      {beingLoaded &&
+        <CenteredSpinner />
+      }
       <Row className={classes.info}>
         <Col xs={3}>
           <strong>{t("label_language")}</strong>

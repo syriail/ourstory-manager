@@ -20,6 +20,7 @@ import {
 import {Collection} from '../../api/models'
 import { TranslateCollectionRequest } from "../../api/requests"
 import { AuthContext } from "../../contexts/authContext"
+import CenteredSpinner from "../../components/ui/CenteredSpinner"
 
 const TranslateCollection: React.FunctionComponent<any> = (props) => {
     const {t}  = useTranslation()
@@ -36,6 +37,7 @@ const TranslateCollection: React.FunctionComponent<any> = (props) => {
   const [invalidTagName, setInvalidTagName] = useState(false)
   const routerParams = useParams()
   const {employee, getToken} = useContext(AuthContext)
+  const [beingLoaded, setBeingLoaded] = useState(true)
 
   const locale = routerParams.locale
   const collectionId = routerParams.collectionId
@@ -64,6 +66,7 @@ const TranslateCollection: React.FunctionComponent<any> = (props) => {
     } else {
       updateStates(collection)
     }
+    setBeingLoaded(false)
   }
   const updateStates = (collection: Collection) => {
     setCollection(collection)
@@ -78,6 +81,7 @@ const TranslateCollection: React.FunctionComponent<any> = (props) => {
       }
       setTags(tagsToTranslate)
     }
+    
   }
   const updateTagTranslation = (slug:string, translation: string) => {
     let newTags = []
@@ -139,7 +143,16 @@ const TranslateCollection: React.FunctionComponent<any> = (props) => {
     return valid
   }
   const cancel = () => {
-    props.history.goBack()
+    navigate(-1)
+  }
+  if(beingLoaded){
+    return (
+      <>
+        {beingLoaded &&
+        <CenteredSpinner />
+      }
+      </>
+    )
   }
   return beingUpdated ? (
     <div>
@@ -149,6 +162,7 @@ const TranslateCollection: React.FunctionComponent<any> = (props) => {
     </div>
   ) : !errorMessage && collection ? (
     <Container>
+      
       <Row className={classes.info}>
         <Col xs={3}>
           <strong>{t("label_language")}</strong>

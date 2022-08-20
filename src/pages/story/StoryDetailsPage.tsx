@@ -1,5 +1,5 @@
 import { ChangeEvent, Fragment, useContext, useEffect, useState } from "react"
-import { Alert, Button, Col, Container, Form, Modal, ProgressBar, Row } from "react-bootstrap"
+import { Alert, Button, Col, Container, Form, Modal, ProgressBar, Row, Spinner } from "react-bootstrap"
 import classes from "./Stories.module.scss"
 import ReactPlayer from "react-player"
 import { useTranslation } from "react-i18next"
@@ -15,6 +15,7 @@ import {
   deleteMediaFile,
   deleteStoryPermanently
 } from '../../api/ourstory'
+import CenteredSpinner from "../../components/ui/CenteredSpinner"
 const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
     const {employee, getToken} = useContext(AuthContext)
     const {t} = useTranslation()
@@ -26,6 +27,8 @@ const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
   const [mediaToShow, setMediaToShow] = useState<MediaFile>()
   const [showMediaModal, setShowMediaModal] = useState(false)
   const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+  const [beingLoaded, setBeingLoaded] = useState(true)
+  const [mediaBeingRemoved, setMediaBeingRemoved] = useState(false)
 
   const params = useParams()
   const storyId = params.storyId
@@ -48,6 +51,7 @@ const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
       const token = await getToken()
       const collection = await getCollectionById(token, story?.collectionId, story.defaultLocale)
       setCollection(collection)
+      setBeingLoaded(false)
     }
     
   }
@@ -69,6 +73,7 @@ const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
     if(translationToAdd) navigate(`/stories/translate/ADD/${storyId}/${translationToAdd}`)
   }
   const removeMedia = async (path: string) => {
+    setMediaBeingRemoved(true)
     try {
       const token = await getToken()
      await deleteMediaFile(token, story!.id, path)
@@ -76,6 +81,7 @@ const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
     } catch (error) {
       console.log(error)
     }
+    setMediaBeingRemoved(false)
   }
   const mediaUploaded = (mediaFile: MediaFile) => {
     setMediaFiles([...mediaFiles, mediaFile])
@@ -90,8 +96,16 @@ const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
   const toEditStory = ()=>{
     navigate(`/stories/EDIT/${story?.collectionId}/${story?.defaultLocale}/${story?.id}`)
   }
-  return story ? (
+  if (beingLoaded) return (
+    <>
+      {beingLoaded &&
+        <CenteredSpinner />
+      }
+    </>
+  )
+  return story ?(
     <Fragment>
+      
       <Container>
         <Row className={classes.info}>
           <Col xs={3}>
@@ -113,9 +127,12 @@ const StoryDetailsPage: React.FunctionComponent<any> = (props) => {
           </Col>
         </Row>
         <Container className={classes.container}>
-            <div>{t("label_media_files")}</div>
+            <div><strong>{t("label_media_files")}</strong></div>
             {mediaFiles.map((mediaFile, index) => (
               <div key={index} className={classes.actionContainer}>
+                {mediaBeingRemoved &&
+                  <Spinner animation="border" variant="light"/>
+                }
               <p>{t(`format_${mediaFile.format}`)}</p>
               <Button variant="link" onClick={() => showMedia(mediaFile)}>
                 {t("button_show")}

@@ -1,0 +1,9 @@
+@import "../../styles/variables";
+
+.spinnerContainer{
+    width: 100%;
+  }
+  .spinnerBox{
+    width: 3*$spacer;
+    margin: 0.5*$spacer auto;
+  } 

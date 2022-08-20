@@ -11,11 +11,13 @@ import {Collection, languages} from '../../api/models'
 import { useNavigate, useParams } from "react-router"
 import { AuthContext } from "../../contexts/authContext"
 import { getCollectionById } from "../../api/ourstory"
+import CenteredSpinner from "../../components/ui/CenteredSpinner"
 
 const CollectionDetails: React.FunctionComponent = () => {
   const [collection, setCollection] = useState<Collection>()
   const [translationToAdd, setTranslationToAdd] = useState("")
   const {employee, getToken} = useContext(AuthContext)
+  const [beingLoaded, setBeingLoaded] = useState(true)
   const {t} = useTranslation()
   const navigate = useNavigate()
     const params = useParams()
@@ -28,6 +30,9 @@ const CollectionDetails: React.FunctionComponent = () => {
       const token = await getToken()
         getCollectionById(token, collectionId!, employee!.locale)
     .then(c => setCollection(c))
+    .finally(()=>{
+      setBeingLoaded(false)
+    })
     }else{
         navigate('/', {replace: true})
     }
@@ -37,6 +42,16 @@ const CollectionDetails: React.FunctionComponent = () => {
   const addTranslation = () => {
     if (translationToAdd && translationToAdd !== "")
       navigate(`/collections/translate/${collection!.id}/${translationToAdd}`)
+  }
+
+  if(beingLoaded){
+    return (
+      <>
+        {beingLoaded &&
+        <CenteredSpinner />
+      }
+      </>
+    )
   }
 
   return collection ? (

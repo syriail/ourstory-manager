@@ -7,31 +7,37 @@ import { Button } from "react-bootstrap"
 import { useTranslation } from "react-i18next"
 import { AuthContext } from "../../contexts/authContext"
 import { useNavigate, useParams } from "react-router"
-import {languages, Story} from '../../api/models'
+import {Collection, languages, Story} from '../../api/models'
 import {getStoriesByCollection} from '../../api/ourstory'
+import CenteredSpinner from "../../components/ui/CenteredSpinner"
+import { connect } from "react-redux"
 
-const StoriesPage: React.FunctionComponent<any> = (props) => {
+const StoriesPage: React.FunctionComponent<{getStoriesCount?:any, collectionsBeingFetched?:boolean}> = (props) => {
   const {t} = useTranslation()
   const {employee, getToken} = useContext(AuthContext)
   const [stories, setStories] = useState<Story[]>([])
   const [pageHistory, setPageHistory] = useState<string[]>(['undefined'])
   const [lastId, setLastId] = useState<string | undefined>()
+  const [isFetching, setIsFetching] = useState(true)
+  const [storiesCount, setStoriesCount] = useState(0)
 
   const navigate = useNavigate()
   const params = useParams()
   const collectionId = params.collectionId
   const defaultLocale = params.defaultLocale
+  useEffect(()=>{
+    setStoriesCount(props.getStoriesCount(collectionId))
+
+    
+  }, [props.collectionsBeingFetched])
+
   useEffect(() => {
     loadStories()
   }, [pageHistory])
 
 
-  useEffect(()=>{
-    console.log(lastId)
-    console.log(pageHistory)
-  }, [pageHistory])
-
   const loadStories = async () => {
+    setIsFetching(true)
     const token = await getToken()
     let lastPageHistory = pageHistory[pageHistory.length - 1]
     getStoriesByCollection(
@@ -40,6 +46,7 @@ const StoriesPage: React.FunctionComponent<any> = (props) => {
       employee!.locale,
       lastPageHistory === 'undefined' ? undefined : lastPageHistory
     ).then((res)=>{
+      setIsFetching(false)
       setStories(res.stories)
       setLastId(res.lastId)
     })
@@ -70,15 +77,15 @@ const StoriesPage: React.FunctionComponent<any> = (props) => {
     <Container fluid>
       <Row>
         <Col xs={10}>
-          <h2>{t("label_stories")}</h2>
+          <h2>{t("label_stories")} ({storiesCount})</h2>
         </Col>
         <Col xs={2}>
-          <Button variant="link" onClick={toAddStory}>
+          <Button variant="dark" onClick={toAddStory} style={{width:"100%"}}>
             {t("button_add_story")}
           </Button>
         </Col>
       </Row>
-
+     
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -116,6 +123,9 @@ const StoriesPage: React.FunctionComponent<any> = (props) => {
           ))}
         </tbody>
       </Table>
+      {isFetching && 
+        <CenteredSpinner />
+      }
       <div>
         <Button disabled={lastId === undefined} onClick={nextPage}>Next</Button>
         <Button disabled={pageHistory.length === 1} onClick={prevPage}>Prev</Button>
@@ -124,4 +134,17 @@ const StoriesPage: React.FunctionComponent<any> = (props) => {
   )
 }
 
-export default StoriesPage
+const mapStateToProps = (state: any)=>{
+  return {
+    collectionsBeingFetched: state.collections.isFetching,
+    getStoriesCount: (collectionId: string)=> {
+      const collection  = state.collections.collections.find((c: Collection) => c.id === collectionId)
+      if(collection) return collection.storiesCount
+      return 0
+      
+    }
+  }
+}
+
+export default connect(mapStateToProps)(StoriesPage)
+
