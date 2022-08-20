@@ -2,9 +2,14 @@
 import Axios from 'axios'
 import * as OurStory from './models'
 import * as Requests from './requests'
+import algoliasearch from 'algoliasearch'
+import { SearchResponse } from '@algolia/client-search'
 
 const endpoint = process.env.REACT_APP_API_ENDPOINT
-
+const algoliaClient = algoliasearch(
+    process.env.REACT_APP_ALGOLIA_APP_ID!,
+    process.env.REACT_APP_ALGOLIA_SEARCH_KEY!
+  )
 
 export const getEmployee = async(token: string, id:string):Promise<OurStory.Employee>=>{
     const headers = {
@@ -319,4 +324,32 @@ export const translateStory = (token: string, request: Requests.TranslateStoryRe
             }
         }).catch(error=> reject(error))
     })
+}
+export const search = async(locale: string, text: string, pageSize: number, pageNumber: number): Promise<any>=>{
+    const indexName = `${process.env.REACT_APP_ALGOLIA_INDEX_PREFIX}${locale}`
+    const algoliaIndex = algoliaClient.initIndex(indexName)
+
+    return new Promise((resolve, reject)=>{
+        algoliaIndex.search(text, {restrictSearchableAttributes:["storyTitle"], page: pageNumber, hitsPerPage: pageSize})
+            .then((result: SearchResponse<any>)=>{
+                console.log('Raw result of search')
+                console.log(result)
+                resolve(parseSearchResults(result))
+            })
+            .catch(error=> reject(error))
+    })
+    
+}
+const parseSearchResults = (result: SearchResponse<OurStory.Story>)=>{
+    let stories: any[] = []
+    for(const hit of result.hits){
+        
+        stories.push({
+            id: hit.objectID,
+            collectionId: hit.collectionId,
+            storyTitle: hit.storyTitle
+        })
+        
+    }
+    return stories
 }

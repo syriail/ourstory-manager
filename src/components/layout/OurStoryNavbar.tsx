@@ -10,6 +10,7 @@ import { AuthContext } from "../../contexts/authContext"
 import {useTranslation} from 'react-i18next'
 import classes from './Layout.module.scss'
 import { useNavigate } from "react-router"
+import SearchBox from "./SearchBox"
 
 const OurStoryNavbar: React.FunctionComponent = (props: any) => {
 
@@ -60,6 +61,9 @@ const OurStoryNavbar: React.FunctionComponent = (props: any) => {
                   </NavDropdown.Item>
               </NavDropdown>
           </Nav>
+          <div className={classes.searchWrapper}>
+            <SearchBox />
+          </div>
           <Nav.Item>
             <Button variant="dark" onClick={logout}>
             {t('button_logout')}

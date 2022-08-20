@@ -50,6 +50,7 @@
     "button_close":"Close",
     "button_delete": "Delete",
     "button_confirm": "Confirm",
+    "button_search": "Search Stories",
     "message_being_updated":"DO NOT CLOSE PLEASE!",
     "message_updating_collection":"Updating collection..",
     "message_updating_story":"Updating story..",

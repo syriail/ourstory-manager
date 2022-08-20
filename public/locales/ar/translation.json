@@ -50,6 +50,7 @@
     "button_delete":"حذف",
     "button_confirm": "تأكيد",
     "button_add_translation":"إضافة ترجمة",
+    "button_search": "بحث عن قصة",
     "message_being_updated":"الرجاء عدم الإغلاق",
     "message_updating_collection":"جاري تعديل المجموعة...",
     "message_updating_story":"جاري تعديل الحكاية",

@@ -10,3 +10,51 @@
 .navItem{
   min-width: 100px;
 }
+.searchWrapper {
+  display: inline-block;
+  width: 55%;
+  margin: 0;
+}
+.searchWrapper.bottom {
+  display: none;
+}
+.searchWrapper form {
+  display: inline-flex;
+
+  width: 80%;
+  position: relative;
+}
+
+.searchWrapper form input[type="search"] {
+  height: 34px;
+  border-radius: 5px;
+  width: 100%;
+  margin-inline-start: -24px;
+  padding: 0 33px 0 33px;
+  border: 1px solid $secondary;
+  outline: none;
+}
+
+.searchWrapper form input[type="submit"] {
+  position: relative;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 8px;
+  background: url(../../styles/images/icons/search-blue.svg) center center
+    no-repeat;
+  color: transparent;
+  font-size: 0;
+  border: 0;
+  padding: 0;
+}
+.searchWithResults{
+  display: flex;
+  flex-direction: column;
+  
+}
+.searchResults{
+  margin-top: 50px;
+  width: 20 * $spacer;
+  position: fixed;
+}

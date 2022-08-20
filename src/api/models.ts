@@ -91,5 +91,9 @@ export interface UploadAttachmentData{
 uploadUrl: string
 attachmentUrl: string
 }
+export type SearchResult = {
+  stories: Story[],
+  total: number
+}
 
 export const languages = ['en', 'ar']
