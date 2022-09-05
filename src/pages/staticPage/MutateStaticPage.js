@@ -21,7 +21,6 @@ const MutateStaticPage = ({ action }) => {
   const [invalidDescription, setInvalidDescription] = useState(false)
   const [invalidLayouts, setInvalidLayouts] = useState(false)
   const [invalidContent, setInvalidContent] = useState(false)
-  const [inValidLayout, setInvalidLayout] = useState(false)
   const [beingUpdated, setBeingUpdated] = useState(false)
   const [isFetching, setIsFetching] = useState(false)
   const { t, i18n } = useTranslation()
@@ -60,8 +59,15 @@ const MutateStaticPage = ({ action }) => {
     setTitle(value)
   }
   const slugChanged = (value) => {
+    if (value.trim() === "") {
+      setSlug(value)
+      return
+    }
     let slug = value.replaceAll(" ", "_")
-    setSlug(slug.toLowerCase())
+    const regex = /([A-Za-z_]+)/g
+    const match = slug.match(regex)
+    if (match && match.length === 1 && match[0] === slug)
+      setSlug(slug.toLowerCase())
   }
 
   const handleLayoutToggle = (layout) => {
@@ -73,6 +79,7 @@ const MutateStaticPage = ({ action }) => {
     }
   }
   const submit = async () => {
+    if (!validateInput()) return
     setBeingUpdated(true)
     if (action === "ADD" || action === "TRANSLATE") {
       await savePage()
@@ -81,6 +88,36 @@ const MutateStaticPage = ({ action }) => {
       await saveUpatedPage()
     }
     setBeingUpdated(false)
+  }
+  const validateInput = () => {
+    let valid = true
+    setInvalidTitle(false)
+    setInvalidSlug(false)
+    setInvalidDescription(false)
+    setInvalidLayouts(false)
+    setInvalidContent(false)
+    if (!title || title.trim() === "") {
+      valid = false
+      setInvalidTitle(true)
+    }
+    if (!slug || slug.trim() === "") {
+      valid = false
+      setInvalidSlug(true)
+    }
+    if (!description || description.trim() === "") {
+      valid = false
+      setInvalidDescription(true)
+    }
+    if (layouts.length === 0) {
+      valid = false
+      setInvalidLayouts(true)
+    }
+    const content = editorRef.current.getContent()
+    if (!content || content.trim() === 0) {
+      valid = false
+      setInvalidContent(true)
+    }
+    return valid
   }
   const savePage = async () => {
     if (editorRef.current) {
@@ -153,6 +190,10 @@ const MutateStaticPage = ({ action }) => {
           <Form.Control.Feedback type="invalid">
             {t("error_static_page_slug_required")}
           </Form.Control.Feedback>
+          <div className={classes.tooltip}>
+            <span className="material-symbols-outlined">help</span>
+            <span className={classes.tooltiptext}>{t("tooltip_slug")}</span>
+          </div>
         </InputGroup>
         <InputGroup hasValidation className={classes.input}>
           <Form.Control
@@ -192,7 +233,7 @@ const MutateStaticPage = ({ action }) => {
       </Form>
       <div className={classes.input}>
         <Editor
-          apiKey="c9ccdazp104scf9y6wk43d91mf001po1s78xjfadde281gd0"
+          apiKey={process.env.REACT_APP_TINY_EDITOR_API_KEY}
           onInit={(evt, editor) => (editorRef.current = editor)}
           initialValue={pageToEdit ? pageToEdit.content : ""}
           init={{

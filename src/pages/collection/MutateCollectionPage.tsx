@@ -117,16 +117,18 @@ const MutateCollectionPage: React.FunctionComponent<{action: string, collectionC
   }
   const tagNameChanged = (e: { target: { value: any } }) => {
     const value = e.target.value
-    let slug = value.replaceAll(" ", "_")
-    slug = slug.toLowerCase()
     setTagName(value)
-    setTagSlug(slug)
+    tagSlugChanged(value)
   }
-  const tagSlugChanged = (e: { target: { value: any } }) => {
-    const value = e.target.value
+  const tagSlugChanged = (value: string) => {
+    if (value.trim() === "") {
+      setTagSlug(value)
+      return
+    }
     let slug = value.replaceAll(" ", "_")
-    slug = slug.toLowerCase()
-    setTagSlug(slug)
+    const regex = /([A-Za-z_]+)/g
+    const match = slug.match(regex)
+    if (match && match.length === 1 && match[0]===slug) setTagSlug(slug.toLowerCase())
   }
   const saveTag = () => {
     if (validateTag()) {
@@ -436,6 +438,7 @@ const MutateCollectionPage: React.FunctionComponent<{action: string, collectionC
                 <Form.Control.Feedback type="invalid">
                   {t("error_tag_name")}
                 </Form.Control.Feedback>
+                
               </InputGroup>
               <InputGroup hasValidation>
                 <Form.Control
@@ -444,11 +447,15 @@ const MutateCollectionPage: React.FunctionComponent<{action: string, collectionC
                   isInvalid={invalidTagName}
                   placeholder={t("label_slug")}
                   value={tagSlug}
-                  onChange={tagSlugChanged}
+                  onChange={(e)=> tagSlugChanged(e.target.value)}
                 />
                 <Form.Control.Feedback type="invalid">
                   {t("error_tag_slug_required")}
                 </Form.Control.Feedback>
+                <div className={classes.tooltip}>
+                <span className="material-symbols-outlined">help</span>
+                <span className={classes.tooltiptext}>{t("tooltip_slug")}</span>
+          </div>
               </InputGroup>
             </div>
             <Button variant="light" onClick={saveTag}>
