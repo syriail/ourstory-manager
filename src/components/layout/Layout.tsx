@@ -20,9 +20,7 @@ const Layout: React.FunctionComponent<any> = (props:any) => {
 
     const loadStuff = async()=>{
       i18n.changeLanguage(employee!.locale)
-        const token = await getToken()
-        console.log('The token which been fetched: ' + token)
-        
+        const token = await getToken()        
         props.fetchCollections(token, employee!.locale)
     }
   return (

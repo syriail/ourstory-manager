@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container"
 import NavDropdown from "react-bootstrap/NavDropdown"
 import { connect } from "react-redux"
 import { Button } from "react-bootstrap"
-import { Collection } from "../../api/models"
+import { Collection, EmployeeRole } from "../../api/models"
 import { AuthContext } from "../../contexts/authContext"
 import {useTranslation} from 'react-i18next'
 import classes from './Layout.module.scss'
@@ -14,12 +14,12 @@ import SearchBox from "./SearchBox"
 
 const OurStoryNavbar: React.FunctionComponent = (props: any) => {
 
-  const auth = useContext(AuthContext)
+  const {signOut, employee} = useContext(AuthContext)
   const {t, i18n}  = useTranslation()
   const navigate = useNavigate()
 
     const logout = () => {
-    auth.signOut()
+    signOut()
     navigate('/')
   }
   const changeLanguage = (locale: string)=>{
@@ -48,6 +48,11 @@ const OurStoryNavbar: React.FunctionComponent = (props: any) => {
                 ))}
               </NavDropdown>
             )}
+            {employee && employee.roles.includes(EmployeeRole.ADMIN) && 
+              <Nav.Link className={classes.navItem} href="/pages">
+              {t('label_static_pages')}
+            </Nav.Link>
+            }
             <NavDropdown
               className={classes.navItem}
                 title={t('label_language')}

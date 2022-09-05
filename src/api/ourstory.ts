@@ -353,3 +353,85 @@ const parseSearchResults = (result: SearchResponse<OurStory.Story>)=>{
     }
     return stories
 }
+
+export const createPage = (token: string, request: Requests.CreateStaticPage)=>{
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    return new Promise((resolve, reject)=>{
+        Axios.post(`${endpoint}/pages`, request, {headers})
+        .then(response =>{
+            if(response.status === 201){
+                resolve(true)
+            }else{
+                reject('')
+            }
+        }).catch(error=> reject(error))
+    })
+}
+export const updatePage = (token: string, request: Requests.CreateStaticPage)=>{
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    return new Promise((resolve, reject)=>{
+        Axios.patch(`${endpoint}/pages`, request, {headers})
+        .then(response =>{
+            if(response.status === 201){
+                resolve(true)
+            }else{
+                reject('')
+            }
+        }).catch(error=> reject(error))
+    })
+}
+export const getPages = (token: string, locale: string): Promise<OurStory.StaticPage[]>=>{
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    return new Promise((resolve, reject)=>{
+        Axios.get(`${endpoint}/pages/${locale}`, {headers})
+        .then(response =>{
+            if(response.status === 200){
+                resolve(response.data.pages)
+            }else{
+                reject([])
+            }
+        }).catch(error=> reject(error))
+    })
+}
+
+export const getPageDetails = (token: string, slug: string, locale: string): Promise<OurStory.StaticPage> => {
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    return new Promise((resolve, reject)=>{
+        Axios.get(`${endpoint}/page/${slug}/${locale}`, {headers})
+        .then(response =>{
+            if(response.status === 200){
+                resolve(response.data)
+            }else{
+                reject('')
+            }
+        }).catch(error=> reject(error))
+    })
+}
+export const deletePage = (token: string, slug: string) => {
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    return new Promise((resolve, reject)=>{
+        Axios.delete(`${endpoint}/pages/delete/${slug}`, {headers})
+        .then(response =>{
+            if(response.status === 204){
+                resolve(true)
+            }else{
+                reject('')
+            }
+        }).catch(error=> reject(error))
+    })
+}

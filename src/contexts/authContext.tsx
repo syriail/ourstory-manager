@@ -67,7 +67,6 @@ const AuthProvider = ({ children }: Props) => {
       const attr: any = await getAttributes()
       setAttrInfo(attr)
       const employee = await getEmployee(session.getAccessToken().getJwtToken(), session.getIdToken().payload.sub)
-      console.log(employee)
       setEmployee(employee)
       setAuthStatus(AuthStatus.SignedIn)
     } catch (err) {
@@ -110,7 +109,6 @@ const AuthProvider = ({ children }: Props) => {
 
   async function getSession() {
     try {
-      console.log('Get seesion in authContext')
       const session = await authorizer.getSession()
       return session
     } catch (err) {

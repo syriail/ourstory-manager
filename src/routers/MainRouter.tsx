@@ -4,6 +4,9 @@ import CollectionDetails from '../pages/collection/CollectionDetailsPage'
 import CollectionsPage from '../pages/collection/CollectionsPage'
 import MutateCollectionPage from '../pages/collection/MutateCollectionPage'
 import TranslateCollection from '../pages/collection/TranslateCollection'
+import MutateStaticPage from '../pages/staticPage/MutateStaticPage'
+import StaticPageDetails from '../pages/staticPage/StaticPageDetails'
+import StaticPages from '../pages/staticPage/StaticPages'
 import MutateStoryTranslationPage from '../pages/story/MutateStoryTranslationPage'
 import MutateStroyPage from '../pages/story/MutateStroyPage'
 import StoriesPage from '../pages/story/StoriesPage'
@@ -24,6 +27,11 @@ const MainRouter: React.FunctionComponent = ()=>(
       <Route path="stories/details/:storyId" element={<StoryDetailsPage />} />
       <Route path="stories/translate/ADD/:storyId/:locale" element={<MutateStoryTranslationPage />} />
       <Route path="stories/translate/EDIT/:storyId/:locale" element={<MutateStoryTranslationPage action='EDIT'/>} />
+      <Route path="pages" element={<StaticPages/>} />
+      <Route path="pages/ADD/:locale" element={<MutateStaticPage action='ADD'/>} />
+      <Route path="pages/:slug/:locale" element={<StaticPageDetails />}/>
+      <Route path="pages/EDIT/:slug/:locale" element={<MutateStaticPage action='EDIT'/>} />
+      <Route path="pages/TRANSLATE/:slug/:locale" element={<MutateStaticPage action='TRANSLATE'/>} />
     </Route>
 </Routes>
 )
