@@ -28,7 +28,6 @@ const OurStoryNavbar: React.FunctionComponent = (props: any) => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand className={classes.navItem} href="/">Our Story</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className='flex-grow-1'>
@@ -53,18 +52,12 @@ const OurStoryNavbar: React.FunctionComponent = (props: any) => {
               {t('label_static_pages')}
             </Nav.Link>
             }
-            <NavDropdown
-              className={classes.navItem}
-                title={t('label_language')}
-                id="basic-nav-dropdown"
-              >
-                <NavDropdown.Item onClick={()=> changeLanguage('ar')}>
-                    Arbaic
-                  </NavDropdown.Item>
-                  <NavDropdown.Item onClick={()=> changeLanguage('en')}>
-                    English
-                  </NavDropdown.Item>
-              </NavDropdown>
+            {employee && employee.roles.includes(EmployeeRole.ADMIN) && 
+              <Nav.Link className={classes.navItem} href="/users">
+              {t('label_users')}
+            </Nav.Link>
+            }
+            
           </Nav>
           <div className={classes.searchWrapper}>
             <SearchBox />
@@ -88,3 +81,17 @@ const mapStateToProps = (state: any) => {
 
 
 export default connect(mapStateToProps)(OurStoryNavbar)
+/*
+<NavDropdown
+              className={classes.navItem}
+                title={t('label_language')}
+                id="basic-nav-dropdown"
+              >
+                <NavDropdown.Item onClick={()=> changeLanguage('ar')}>
+                    Arbaic
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={()=> changeLanguage('en')}>
+                    English
+                  </NavDropdown.Item>
+              </NavDropdown>
+*/

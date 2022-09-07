@@ -12,7 +12,7 @@ export const Password: React.FunctionComponent<{
   passwordIsValid: boolean
   setPassword: (_: string) => void
 }> = ({ label, password, passwordIsValid, setPassword }) => {
-  
+  const {t} = useTranslation()
   return (
     <div className={classes.input}>
         <InputGroup hasValidation >
@@ -28,7 +28,7 @@ export const Password: React.FunctionComponent<{
                     }}
             />
             <Form.Control.Feedback type="invalid">
-                Invalid password
+                {t('error_invalid_password')}
             </Form.Control.Feedback>
         </InputGroup>
     </div>
@@ -57,7 +57,7 @@ export const Username: React.FunctionComponent<{ username: string, usernameIsVal
                 }}
         />
         <Form.Control.Feedback type="invalid">
-        Invalid username
+                {t('error_invalid_username')}
         </Form.Control.Feedback>
     </InputGroup>
     </div>

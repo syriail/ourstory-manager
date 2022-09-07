@@ -1,0 +1,32 @@
+@import "../../styles/variables";
+
+.info {
+    margin-bottom: $spacer;
+  }
+.actionContainer{
+  display: flex;
+  justify-content: space-between
+}
+.info {
+  margin-bottom: $spacer;
+}
+.input{
+  width: 60%;
+}
+.submit{
+  min-width: 200px;
+}
+.roleContainer{
+    display: flex,
+  
+  }
+  .checkbox{
+    margin: 0.5 * $spacer;
+  }
+  .checkbox input{
+    width: 20px !important;
+    margin:  0 !important;
+  }
+  .checkbox label{
+    margin: 0 0.5*$spacer;
+  }

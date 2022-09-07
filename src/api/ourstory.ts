@@ -435,3 +435,37 @@ export const deletePage = (token: string, slug: string) => {
         }).catch(error=> reject(error))
     })
 }
+
+export const getEmployees = (token: string):Promise<OurStory.Employee[]> => {
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    return new Promise((resolve, reject)=>{
+        Axios.get(`${endpoint}/employees`, {headers})
+        .then(response =>{
+            if(response.status === 200){
+                resolve(response.data.employees)
+            }else{
+                reject('')
+            }
+        }).catch(error=> reject(error))
+    })
+}
+
+export const createEmployee = (token: string, request: Requests.CreateEmployeeRequest):Promise<OurStory.Employee>=>{
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    return new Promise((resolve, reject)=>{
+        Axios.post(`${endpoint}/employees`, request, {headers})
+        .then(response =>{
+            if(response.status === 201){
+                resolve(response.data.employee)
+            }else{
+                reject('')
+            }
+        }).catch(error=> reject(error))
+    })
+}

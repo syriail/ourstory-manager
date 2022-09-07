@@ -11,6 +11,8 @@ import MutateStoryTranslationPage from '../pages/story/MutateStoryTranslationPag
 import MutateStroyPage from '../pages/story/MutateStroyPage'
 import StoriesPage from '../pages/story/StoriesPage'
 import StoryDetailsPage from '../pages/story/StoryDetailsPage'
+import AddUserPage from '../pages/user/AddUserPage'
+import UsersPage from '../pages/user/UsersPage'
 
 const MainRouter: React.FunctionComponent = ()=>(
   <Routes>
@@ -32,6 +34,8 @@ const MainRouter: React.FunctionComponent = ()=>(
       <Route path="pages/:slug/:locale" element={<StaticPageDetails />}/>
       <Route path="pages/EDIT/:slug/:locale" element={<MutateStaticPage action='EDIT'/>} />
       <Route path="pages/TRANSLATE/:slug/:locale" element={<MutateStaticPage action='TRANSLATE'/>} />
+      <Route path="users" element={<UsersPage/>} />
+      <Route path="users/add" element={<AddUserPage/>} />
     </Route>
 </Routes>
 )
