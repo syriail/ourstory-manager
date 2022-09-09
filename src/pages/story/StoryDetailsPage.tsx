@@ -364,7 +364,7 @@ const AddMedia: React.FunctionComponent<{storyId:string, onUpload:(mediaFile: Me
     setMediaFormat(MediaFormat[key])
     switch (selectedFormat) {
       case "VIDEO":
-        setAcceptedFile("video/*")
+        setAcceptedFile("video/mp4")
         break
       case "AUDIO":
         setAcceptedFile("audio/*")
